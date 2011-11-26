@@ -2,6 +2,8 @@ import java.io.*;
  public class Procesador{
 	//private id;	
 	private Queue<Double> q;
+	private Queue<Tarea> tareas;
+
 	
 	private double nextA;
 	private double nextD;
@@ -10,6 +12,7 @@ import java.io.*;
 	
 	public Procesador(){
 		q = new Queue<Double>();
+		tareas = new Queue<Tarea>();
 		//this.id=id;
 		//busy=false;
 		this.nextA=0;//StdRandom.exp(lambda); 
@@ -47,11 +50,13 @@ import java.io.*;
 		return q.isEmpty();
 	}
 
-	public void enqueue(){
+	public void enqueue(Tarea t){
+		tareas.enqueue(t);
 		q.enqueue(nextA);
 	}
 
 	public double dequeue(){
+		tareas.dequeue();
 		return q.dequeue();
 	}
 	public double size(){
@@ -60,6 +65,16 @@ import java.io.*;
 	
 	public double peek(){
 		return q.peek();
+	}
+
+	public int tarea_id(){
+		if(!tareas.isEmpty())
+			return tareas.peek().getId();
+		return -1;
+	}
+
+	public int tarea_procs(){
+		return tareas.peek().getProcs();
 	}
 
 	public boolean getTouched(){

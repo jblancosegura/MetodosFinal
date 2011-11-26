@@ -34,19 +34,16 @@ public class RoundRobin extends Broker{
 		double mayorD = departureMayor(indices); //obtenemos el departure Mayor
 		double mayor = arrivalMayor(indices); //obtenemos el arrival Mayor
 
-		/*En caso de que todas las filas esten vacias ponemos el nextDeparture.*/
+		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
-
-		//si hay uno en fila, if nextDepartueActual<nextDepartureNuevo, REHACER departure, pues cuando salga el lonewolf recalcular departure para su siguiente 
 		double departureTime = mayor + StdRandom.exp(mu);
 		if(mayorD == Double.POSITIVE_INFINITY){
 			mayorD = departureTime;
 		}
 		for(int i = 0; i<indices.length; i++){
 			assigns = indices[i];
-			if(procesadores[assigns].getNextD() != mayorD){
+			if(procesadores[assigns].getNextD() == Double.POSITIVE_INFINITY){
 				procesadores[assigns].setNextD(departureTime);
-				System.out.println("bitch DEPARTS @ "+procesadores[assigns].getNextD());
 			}
 		}
 		//}
@@ -56,7 +53,7 @@ public class RoundRobin extends Broker{
 		double arrivalTime = mayor + StdRandom.exp(lambda);
 		for(int i = 0; i<indices.length; i++){
 			assigns = indices[i];
-			procesadores[assigns].enqueue();
+			procesadores[assigns].enqueue(tarea);
 			procesadores[assigns].setNextA(arrivalTime);
 			System.out.println("PROCESADOR "+indices[i]+" HA ADQUIRIDO UNA TAREA NUEVA.");
 		}

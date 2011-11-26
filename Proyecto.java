@@ -15,6 +15,9 @@ public class Proyecto {
 	int brokerType = 0; //0 - RR, 1 - List, 2 - Paretofractal
 	double wait; //tiempo de espera
 	int aux; //id del procesador a departir
+	int tarea_id;
+	int tarea_procs;
+	int contador_de_procs = 0; //cuenta cuantos procesadores tienen la tarea deseada en queue
 
 	Scanner stdIn = new Scanner(System.in);
 	Broker broker;
@@ -93,18 +96,34 @@ public class Proyecto {
             	else {
 			aux = departureMenorIndex(procesador);	
 			nextDeparture += StdRandom.exp(mu);
+			tarea_id = procesador[aux].tarea_id(); //obtenemos el id de la tarea a sacar
+			tarea_procs = procesador[aux].tarea_procs();//obtenemos la cantidad de procesadores que se ocupan para procesar, valgame la redundancia, la tarea [EDIT: no hay redundancia dice Axel]
+			int indices [] = new int[tarea_procs]; //hacemos el arreglo de los procesadores que tienen la tarea a departir
+			contador_de_procs = 0; //incializamos el contador en 0
+			indices[0] = aux;
+			contador_de_procs++; //pues el del departure menor es parte de los procesadores que tienen la tarea
+			
 			for(int k = 0; k<N; k++){
-				if((procesador[k].getNextD() == procesador[aux].getNextD()) && k != aux && (procesador[k].peek() == procesador[aux].peek())){
-					wait = procesador[k].getNextD() - procesador[k].dequeue();
-					System.out.println("Procesador "+k+" Wait = "+wait+", queue size = "+procesador[k].size());
-					if(procesador[k].queueEmpty()) procesador[k].setNextD(Double.POSITIVE_INFINITY);
-					else procesador[k].setNextD(nextDeparture);
+				if(k != aux && ( procesador[k].tarea_id() == tarea_id ) ){
+					indices[contador_de_procs] = k;
+					contador_de_procs++;
 				}	
 			}
-			wait = procesador[aux].getNextD() - procesador[aux].dequeue();
-			System.out.println("Procesador "+aux+" Wait = "+wait+", queue size = "+procesador[aux].size());	
-			if(procesador[aux].queueEmpty()) procesador[aux].setNextD(Double.POSITIVE_INFINITY);
-			else procesador[aux].setNextD(nextDeparture);	
+			if(contador_de_procs == tarea_procs){ //sacamos la tarea simultaneamente
+				int x;
+				for(int m = 0; m<indices.length; m++){
+					x = indices[m];
+					wait = procesador[x].getNextD() - procesador[x].dequeue();
+					System.out.println("Procesador "+x+" Wait = "+wait+", queue size = "+procesador[x].size());
+					if(procesador[x].queueEmpty()) procesador[x].setNextD(Double.POSITIVE_INFINITY);
+					else procesador[x].setNextD(nextDeparture);
+				}
+			}
+			else{ //no estan listos todos los procesadores que contienen la tarea...se recalcula un departure
+				System.out.println("Procesador "+aux+" sigue teniendo una tarea en espera.");	
+				if(procesador[aux].queueEmpty()) procesador[aux].setNextD(Double.POSITIVE_INFINITY);
+				else /*procesador[aux].setNextD(nextDeparture);	*/procesador[aux].setNextD(Double.POSITIVE_INFINITY);
+			}
             	}
         }
 
