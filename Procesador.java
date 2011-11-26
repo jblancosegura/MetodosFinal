@@ -6,44 +6,44 @@ import java.io.*;
 	private double nextA;
 	private double nextB;
 	
-	public Procesador(int id){
+	public Procesador(){
 		q = new Queue<Double>();
-		this.id=id;
+		//this.id=id;
 		busy=false;
 		nextA=Double.POSITIVE_INFINITY;
 		nextD=Double.POSITIVE_INFINITY;
 		
 	}
-
+	/*
 	public getId(){
 		return id;
 	}
 	public setId(int id){
 		this.id=id;
 		
-	}
-	public getQueue(){
+	}*/
+	public Queue<Double> getQueue(){
 		return q;
 	}
-	public setQueue(Queue q){
+	public void setQueue(Queue q){
 		this.q=q;
 	}
-	public getBusy(){
+	public boolean getBusy(){
 		return busy;
 	}
-	public setBusy(boolean busy){
+	public void setBusy(boolean busy){
 		this.busy=busy;
 	}
-	public getNextA(double nextA){
+	public double getNextA(double nextA){
 		return nextA;
 	}
-	public set(double nextA){
+	public void set(double nextA){
 		this.nextA=nextA;
 	}
-	public getNextB(){
+	public double getNextB(){
 		return nextB;
 	}
-	public setNextB(double nextB){
+	public void setNextB(double nextB){
 		this.nextB=nextB;
 	}
 }
