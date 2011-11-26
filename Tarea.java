@@ -20,7 +20,7 @@ public class Tarea{
 		return this.procs;
 	}
 	
-	public void setId(int procs){
+	public void setProcs(int procs){
 		this.procs = procs;
 	}
 	

@@ -1,7 +1,5 @@
 public abstract class Broker {
 
-   public Broker(){
-   }
 
-   public abstract void assign();
+	public abstract void assign(Tarea tarea);
 }
