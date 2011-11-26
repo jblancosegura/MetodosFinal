@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Proyecto { 
 
-    final static int ITERACIONES = 10;
+    final static int ITERACIONES = 100;
 	public static double nextArrival  =0;// = StdRandom.exp(lambda);     // time of next arrival
         public static double nextDeparture =0;//= Double.POSITIVE_INFINITY;  // time of next departure
     public static void main(String[] args) { 
@@ -32,7 +32,7 @@ public class Proyecto {
 	mu = stdIn.nextDouble();
 	System.out.print("Cantidad de Procesadores: ");
 	N = stdIn.nextInt();
-	System.out.print("Elegir Algoritmo: ");
+	System.out.println("Elegir Algoritmo: ");
 	System.out.println("0 - RoundRobin ");
 	System.out.println("1 - List ");
 	System.out.println("2 - Paretofractal ");
@@ -78,8 +78,8 @@ public class Proyecto {
 
         // Simulacion
         while (i < ITERACIONES) {
-		nextArrival = arrivalMenor(procesador); System.out.println("iter: "+i); System.out.println(nextArrival); 
-		nextDeparture = departureMenor(procesador); System.out.println(nextDeparture);
+		nextArrival = arrivalMenor(procesador); 
+		nextDeparture = departureMenor(procesador);
 		i++;
 	    
 		
@@ -110,6 +110,7 @@ public class Proyecto {
 				}	
 			}
 			if(contador_de_procs == tarea_procs){ //sacamos la tarea simultaneamente
+				System.out.println("TAREA "+tarea_id+" SALE.");
 				int x;
 				for(int m = 0; m<indices.length; m++){
 					x = indices[m];

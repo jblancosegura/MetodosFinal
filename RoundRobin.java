@@ -17,7 +17,7 @@ public class RoundRobin extends Broker{
 		int num = tarea.getProcs();
 		int indices [] = new int[tarea.getProcs()]; //indices de los procesadores donde meteremos la fila
 		double init = arrivalMax(procesadores) + StdRandom.exp(lambda);
-		System.out.println("LLEGA TAREA QUE REQUIERE "+num+" PROCESADORES.");
+		System.out.println("LLEGA TAREA " +tarea.getId()+" QUE REQUIERE "+num+" PROCESADORES.");
 		while(!asignado){
 			indices[assigns] = indice;
 			assigns++;
