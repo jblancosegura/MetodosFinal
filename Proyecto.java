@@ -6,7 +6,7 @@ public class Proyecto {
 
     final static int ITERACIONES = 100;
 	public static double nextArrival  =0;// = StdRandom.exp(lambda);     // time of next arrival
-        public static double nextDeparture =0;//= Double.POSITIVE_INFINITY;  // time of next departure
+        public static double nextDeparture =Double.POSITIVE_INFINITY;//= Double.POSITIVE_INFINITY;  // time of next departure
     public static void main(String[] args) { 
         double lambda; // arrival rate
         double mu; // service rate
@@ -59,6 +59,7 @@ public class Proyecto {
 	*/
 
 	/* INICIALIZACION DE DATOS */
+	nextArrival += StdRandom.exp(lambda);
 	Procesador [] procesador = new Procesador[N];
 	for(int j = 0; j<N; j++){
 		procesador[j] = new Procesador(); 
@@ -78,24 +79,24 @@ public class Proyecto {
 
         // Simulacion
         while (i < ITERACIONES) {
-		nextArrival = arrivalMenor(procesador); 
+		//nextArrival = arrivalMenor(procesador); 
+		
 		nextDeparture = departureMenor(procesador);
 		i++;
 	    
 		
             	/* LLEGADA */
         	if (nextArrival <= nextDeparture) {
-			/*if (q.isEmpty()) nextDeparture = nextArrival + StdRandom.exp(mu);
-                	nextArrival += StdRandom.exp(lambda);*/
 			/* CREAR TAREA*/
 			Tarea tarea = new Tarea(i, (generator.nextInt(N) + 1)); //el ID es unico porque i es incremental y la cantidad de procesadores es de 1 a N.
 			broker.assign(tarea); //segun el algoritmo asigna tareas a los procesadores.
+			nextArrival += StdRandom.exp(lambda);
             	}
 
             	/* SALIDA */
             	else {
 			aux = departureMenorIndex(procesador);	
-			nextDeparture += StdRandom.exp(mu);
+			//nextDeparture += StdRandom.exp(mu);
 			tarea_id = procesador[aux].tarea_id(); //obtenemos el id de la tarea a sacar
 			tarea_procs = procesador[aux].tarea_procs();//obtenemos la cantidad de procesadores que se ocupan para procesar, valgame la redundancia, la tarea [EDIT: no hay redundancia dice Axel]
 			int indices [] = new int[tarea_procs]; //hacemos el arreglo de los procesadores que tienen la tarea a departir
@@ -114,10 +115,12 @@ public class Proyecto {
 				int x;
 				for(int m = 0; m<indices.length; m++){
 					x = indices[m];
+					System.out.println(procesador[x].getNextD() +" : D vs A : "+procesador[x].peek());
 					wait = procesador[x].getNextD() - procesador[x].dequeue();
 					System.out.println("Procesador "+x+" Wait = "+wait+", queue size = "+procesador[x].size());
 					if(procesador[x].queueEmpty()) procesador[x].setNextD(Double.POSITIVE_INFINITY);
-					else procesador[x].setNextD(nextDeparture);
+					else procesador[x].setNextD(procesador[x].getNextD() + StdRandom.exp(mu));
+					//else procesador[x].setNextD(nextDeparture);
 				}
 			}
 			else{ //no estan listos todos los procesadores que contienen la tarea...se recalcula un departure

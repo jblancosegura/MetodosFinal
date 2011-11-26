@@ -16,45 +16,33 @@ public class RoundRobin extends Broker{
 		int assigns = 0;
 		int num = tarea.getProcs();
 		int indices [] = new int[tarea.getProcs()]; //indices de los procesadores donde meteremos la fila
-		double init = arrivalMax(procesadores) + StdRandom.exp(lambda);
 		System.out.println("LLEGA TAREA " +tarea.getId()+" QUE REQUIERE "+num+" PROCESADORES.");
 		while(!asignado){
 			indices[assigns] = indice;
 			assigns++;
 			if(assigns == tarea.getProcs())
 				asignado = true;
-			if(!procesadores[indice].getTouched()){
-				procesadores[indice].setTouched(true);
-				procesadores[indice].setNextA(init);
-				System.out.println("PROCESADOR "+indice+" tiene NA inicial de: "+procesadores[indice].getNextA());
-			}
 			indice = newIndice();
 		}
 		
-		double mayorD = departureMayor(indices); //obtenemos el departure Mayor
 		double mayor = arrivalMayor(indices); //obtenemos el arrival Mayor
 
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
 		double departureTime = mayor + StdRandom.exp(mu);
-		if(mayorD == Double.POSITIVE_INFINITY){
-			mayorD = departureTime;
-		}
 		for(int i = 0; i<indices.length; i++){
 			assigns = indices[i];
-			if(procesadores[assigns].getNextD() == Double.POSITIVE_INFINITY){
-				procesadores[assigns].setNextD(departureTime);
-			}
+			procesadores[assigns].setNextD(departureTime);
 		}
 		//}
 		
 		/*Igualar arrivals a todos los procesadores participantes en la tarea.*/	
 		// ahora assigns es el indice contenido en el arreglo de indices
-		double arrivalTime = mayor + StdRandom.exp(lambda);
+		//double arrivalTime = mayor + StdRandom.exp(lambda);
 		for(int i = 0; i<indices.length; i++){
 			assigns = indices[i];
+			procesadores[assigns].setNextA(Proyecto.nextArrival); //se asigna el mismo arrival time a todos los procesadores involucrados				
 			procesadores[assigns].enqueue(tarea);
-			procesadores[assigns].setNextA(arrivalTime);
 			System.out.println("PROCESADOR "+indices[i]+" HA ADQUIRIDO UNA TAREA NUEVA.");
 		}
 
@@ -72,17 +60,17 @@ public class RoundRobin extends Broker{
     	public static double departureMayor(int arreglo[]){
 		int maximo = 0;
 		for(int i = 0; i<arreglo.length; i++){
-			if(procesadores[arreglo[maximo]].getNextD() < procesadores[arreglo[i]].getNextD() && procesadores[arreglo[i]].getNextD() != Double.POSITIVE_INFINITY)
+			if(procesadores[arreglo[maximo]].getNextD() > procesadores[arreglo[i]].getNextD() && procesadores[arreglo[i]].getNextD() != Double.POSITIVE_INFINITY)
 				maximo = i;
 		}
 		return procesadores[arreglo[maximo]].getNextD();
     	}
 
-	/* Obtiene el arrival mayor de los procesadores. */
+	/* Obtiene el arrival mayor de los procesadores elegidos. */
     	public static double arrivalMayor(int arreglo[]){
 		int maximo = 0;
 		for(int i = 0; i<arreglo.length; i++){
-			if(procesadores[arreglo[maximo]].getNextA() < procesadores[arreglo[i]].getNextA())
+			if(procesadores[arreglo[maximo]].getNextA() > procesadores[arreglo[i]].getNextA())
 				maximo = i;
 		}
 		return procesadores[arreglo[maximo]].getNextA();

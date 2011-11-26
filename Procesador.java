@@ -15,7 +15,7 @@ import java.io.*;
 		tareas = new Queue<Tarea>();
 		//this.id=id;
 		//busy=false;
-		this.nextA=0;//StdRandom.exp(lambda); 
+		this.nextA=Proyecto.nextArrival;//StdRandom.exp(lambda); 
 		this.nextD=Double.POSITIVE_INFINITY;	
 		this.touched = false;
 	}
