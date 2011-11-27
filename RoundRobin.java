@@ -41,11 +41,10 @@ public class RoundRobin extends Broker{
 		//double arrivalTime = mayor + StdRandom.exp(lambda);
 		for(int i = 0; i<indices.length; i++){
 			assigns = indices[i];
-					
 			procesadores[assigns].enqueue(tarea);
 			procesadores[assigns].setNextA(Proyecto.nextArrival); //se asigna el mismo arrival time a todos los procesadores involucrados	
 			procesadores[assigns].setNextD(departureTime); 	
-			System.out.println("PROCESADOR "+indices[i]+" HA ADQUIRIDO UNA TAREA NUEVA.");
+			System.out.println("PROCESADOR "+procesadores[assigns].getId()+" HA ADQUIRIDO UNA TAREA NUEVA.");
 		}
 
 	}

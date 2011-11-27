@@ -13,7 +13,6 @@ public class List extends Broker{
 	}
 
 	public void assign(Tarea tarea){
-		System.out.println("LIST");
 		int assigns = 0;
 		int num = tarea.getProcs();
 		int indices [] = new int[tarea.getProcs()]; //indices de los procesadores donde meteremos la fila
@@ -35,14 +34,15 @@ public class List extends Broker{
 		/*Igualar arrivals a todos los procesadores participantes en la tarea.*/	
 		// ahora assigns es el indice contenido en el arreglo de indices
 		//double arrivalTime = mayor + StdRandom.exp(lambda);
+		System.out.println("---LIST---");
 		for(int i = 0; i<num; i++){
 			//assigns = indices[i];
-					
+			System.out.println("PROCESADOR "+procesadores[i].getId()+" Queue Size: "+procesadores[i].size());
 			procesadores[i].enqueue(tarea);
 			procesadores[i].setNextA(Proyecto.nextArrival); //se asigna el mismo arrival time a todos los procesadores involucrados	
 			procesadores[i].setNextD(departureTime); 	
-			System.out.println("PROCESADOR "+i+" HA ADQUIRIDO UNA TAREA NUEVA.");
 		}
+		System.out.println("---HAN ADQUIRIDO LA NUEVA TAREA---");
 	}
 
 	private void quicksort(int low, int high) {

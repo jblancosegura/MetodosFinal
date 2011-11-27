@@ -1,37 +1,58 @@
 import java.io.*;
+import java.lang.Math;
+
  public class Procesador{
-	//private id;	
+	private int id;	
 	private Queue<Double> q;
 	private Queue<Tarea> tareas;
 
-	
 	private double nextA;
 	private double nextD;
+	private double pareto;
 	private int tareaID;
 	private boolean touched; //si ya han sido usados o no
+
+	/*PARETOFRACTAL*/
+	private static final double phi = 0.5; //probabilidad de tiempo mayor que cierto valor
+	private static final double H = .8; //H
+	private static final double alfa = 1.58; //parametro de forma de distribucion Pareto
+	private static final double A = 600; //parametro de localizacion de distribucion Pareto
+	private double ta = 0; //tiempo de ejecucion de la tarea actual
+	/***************/
 	
-	public Procesador(){
+	public Procesador(int i){
 		q = new Queue<Double>();
 		tareas = new Queue<Tarea>();
-		//this.id=id;
+		this.id=i;
+		this.pareto = 0;
 		//busy=false;
 		this.nextA=Proyecto.nextArrival;//StdRandom.exp(lambda); 
 		this.nextD=Double.POSITIVE_INFINITY;	
 		this.touched = false;
 	}
-	/*
-	public getId(){
-		return id;
-	}
-	public setId(int id){
-		this.id=id;
-		
-	}*/
 	public Queue<Double> getQueue(){
 		return q;
 	}
 	public void setQueue(Queue q){
 		this.q=q;
+	}
+	public int getId(){
+		return id;
+	}
+	public void setId(int id){
+		this.id = id;
+	}
+	public double getPareto(){
+		return pareto;
+	}
+	public void setPareto(double pareto){
+		this.pareto = pareto;
+	}
+	public double getTa(){
+		return ta;
+	}
+	public void setTa(double ta){
+		this.ta = ta;
 	}
 	public double getNextA(){
 		//return nextA;
@@ -85,6 +106,11 @@ import java.io.*;
 			return tareas.peek().getId();
 		return -1;
 	}
+	public double tareaLastD(){
+		if(!tareas.isEmpty())
+			return tareas.peek().getNextD();
+		return -1;
+	}
 
 	public int tarea_procs(){
 		return tareas.peek().getProcs();
@@ -96,5 +122,11 @@ import java.io.*;
 
 	public void setTouched(boolean touched){
 		this.touched = touched;
+	}
+	public double tareasFila(double mu){
+		return (q.size() * mu) + ( (A * Math.pow(q.size(),H) ) / (Math.pow(phi, (1/alfa) ) ) );
+	}
+	public double tareasProc(){
+		return ( ta * ( Math.pow(phi, -(1/alfa) - 1 ) ) );
 	}
 }

@@ -26,6 +26,7 @@ public class Proyecto {
 
 	/* RECABACION DE DATOS*/
 	System.out.println("----------BIENVENIDOS AL FUTURO----------");
+	System.out.println(".  Para Paretofractal se recomienda usar una mu de .0003422910911897 que proviene de 1/u = 2921.49  .");
 	System.out.print("Lambda: ");
 	lambda = stdIn.nextDouble();
 	System.out.print("Mu: ");
@@ -61,8 +62,10 @@ public class Proyecto {
 	/* INICIALIZACION DE DATOS */
 	nextArrival += StdRandom.exp(lambda);
 	Procesador [] procesador = new Procesador[N];
+	double [] valor_esperado = new double[N]; 
 	for(int j = 0; j<N; j++){
-		procesador[j] = new Procesador(); 
+		procesador[j] = new Procesador(j); 
+		valor_esperado[j] = 0;
 	}	
 	/* ********************** */
 	
@@ -70,7 +73,7 @@ public class Proyecto {
 	switch(brokerType){
 		case 0: broker = new RoundRobin(procesador, lambda, mu); break;
 		case 1: broker = new List(procesador, lambda, mu); break;
-		case 2: broker = new Paretofractal(); break;
+		case 2: broker = new Paretofractal(procesador, lambda, mu); break;
 		default: broker = new RoundRobin(procesador, lambda, mu); break;
 	}
 	/*                     */
@@ -84,12 +87,22 @@ public class Proyecto {
 		nextDeparture = departureMenor(procesador);
 		i++;
 	    
-		
+		//medimos cantidad de procesos por cola (procesador)
+		for(int c = 0; c<N; c++){
+			valor_esperado[c] += procesador[c].size(); //vamos sumando el total de procesos por cola
+		}
+
             	/* LLEGADA */
         	if (nextArrival <= nextDeparture) {
 			/* CREAR TAREA*/
 			Tarea tarea = new Tarea(i, (generator.nextInt(N) + 1)); //el ID es unico porque i es incremental y la cantidad de procesadores es de 1 a N.
 			broker.assign(tarea); //segun el algoritmo asigna tareas a los procesadores.
+			/**********************/
+			/*Actualizar TA para el Paretofractal*/
+			for(int c = 0; c<N; c++){
+				procesador[c].setTa(nextArrival - procesador[c].tareaLastD());
+			}
+			/**************/
 			nextArrival += StdRandom.exp(lambda);
             	}
 
@@ -117,7 +130,7 @@ public class Proyecto {
 					x = indices[m];
 					//System.out.println(procesador[x].getNextD() +" : D vs A : "+procesador[x].peek());
 					wait = procesador[x].getNextD() - procesador[x].dequeue();
-					System.out.println("Procesador "+x+" Wait = "+wait+", queue size = "+procesador[x].size());
+					System.out.println("Procesador "+procesador[x].getId()+" Wait = "+wait+", queue size = "+procesador[x].size());
 					if(procesador[x].queueEmpty()) procesador[x].setNextD(Double.POSITIVE_INFINITY);
 					else procesador[x].setNextD(procesador[x].getNextD());
 					//else procesador[x].setNextD(nextDeparture);
@@ -125,12 +138,18 @@ public class Proyecto {
 				}
 			}
 			else{ //no estan listos todos los procesadores que contienen la tarea...se recalcula un departure
-				System.out.println("Procesador "+aux+" sigue teniendo una tarea en espera.");	
+				System.out.println("Procesador "+procesador[aux].getId()+" sigue teniendo una tarea en espera.");	
 				if(procesador[aux].queueEmpty()) procesador[aux].setNextD(Double.POSITIVE_INFINITY);
 				else /*procesador[aux].setNextD(nextDeparture);	*/procesador[aux].setNextD(procesador[aux].getNextD() + StdRandom.exp(mu));
 			}
             	}
+		
+		
         }
+	//medimos cantidad de procesos por cola (procesador)
+	for(int c = 0; c<N; c++){
+		System.out.println("Procesador "+procesador[c].getId()+" :E[m] = "+(valor_esperado[c]/ITERACIONES));
+	}
 
     }
     
