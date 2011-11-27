@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Proyecto { 
 
-        final static int ITERACIONES = 100;
+        final static int ITERACIONES = 10000;
 	public static double nextArrival  =0;// = StdRandom.exp(lambda);     // time of next arrival
         public static double nextDeparture =Double.POSITIVE_INFINITY;//= Double.POSITIVE_INFINITY;  // time of next departure
 	public static double makespan = 0; //makespan esperado
@@ -47,20 +47,6 @@ public class Proyecto {
 	System.out.println("Mu: " + mu);
 	System.out.println("Cantidad de Procesadores: " + N);
 	/*                   */
-
-	/*
-	System.out.println("----------INICIANDO SIMULACION EN 10----------");
-	System.out.println("----------INICIANDO SIMULACION EN 09----------");
-	System.out.println("----------INICIANDO SIMULACION EN 08----------");
-	System.out.println("----------INICIANDO SIMULACION EN 07----------");
-	System.out.println("----------INICIANDO SIMULACION EN 06----------");
-	System.out.println("----------INICIANDO SIMULACION EN 05----------");
-	System.out.println("----------INICIANDO SIMULACION EN 04----------");
-	System.out.println("----------INICIANDO SIMULACION EN 03----------");
-	System.out.println("----------INICIANDO SIMULACION EN 02----------");
-	System.out.println("----------INICIANDO SIMULACION EN 01----------");
-	System.out.println("----------INICIANDO SIMULACION YA!!!----------");
-	*/
 
 	/* INICIALIZACION DE DATOS */
 	nextArrival += StdRandom.exp(lambda);
@@ -163,9 +149,12 @@ public class Proyecto {
 		
         }
 	//medimos cantidad de procesos por cola (procesador)
+	double valor_esperado_final = 0;
 	for(int c = 0; c<N; c++){
 		System.out.println("Procesador "+procesador[c].getId()+" :E[m] = "+(valor_esperado[c]/ITERACIONES));
+		valor_esperado_final += (valor_esperado[c]/ITERACIONES);
 	}
+	System.out.println("Promedio del valor esperado de procesos en cola: "+(valor_esperado_final / N) );
 	System.out.println("Valor esperado del makespan es: "+(makespan / ITERACIONES) );
 
     }
