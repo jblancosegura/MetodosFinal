@@ -69,7 +69,7 @@ public class Proyecto {
 	/* CREACION DEL BROKER */
 	switch(brokerType){
 		case 0: broker = new RoundRobin(procesador, lambda, mu); break;
-		case 1: broker = new List(); break;
+		case 1: broker = new List(procesador, lambda, mu); break;
 		case 2: broker = new Paretofractal(); break;
 		default: broker = new RoundRobin(procesador, lambda, mu); break;
 	}
