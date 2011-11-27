@@ -115,18 +115,19 @@ public class Proyecto {
 				int x;
 				for(int m = 0; m<indices.length; m++){
 					x = indices[m];
-					System.out.println(procesador[x].getNextD() +" : D vs A : "+procesador[x].peek());
+					//System.out.println(procesador[x].getNextD() +" : D vs A : "+procesador[x].peek());
 					wait = procesador[x].getNextD() - procesador[x].dequeue();
 					System.out.println("Procesador "+x+" Wait = "+wait+", queue size = "+procesador[x].size());
 					if(procesador[x].queueEmpty()) procesador[x].setNextD(Double.POSITIVE_INFINITY);
-					else procesador[x].setNextD(procesador[x].getNextD() + StdRandom.exp(mu));
+					else procesador[x].setNextD(procesador[x].getNextD());
 					//else procesador[x].setNextD(nextDeparture);
+					//se debe calcular el mismo nextDeparture para todos los procesadores del nuevo tope de tarea cuya 
 				}
 			}
 			else{ //no estan listos todos los procesadores que contienen la tarea...se recalcula un departure
 				System.out.println("Procesador "+aux+" sigue teniendo una tarea en espera.");	
 				if(procesador[aux].queueEmpty()) procesador[aux].setNextD(Double.POSITIVE_INFINITY);
-				else /*procesador[aux].setNextD(nextDeparture);	*/procesador[aux].setNextD(Double.POSITIVE_INFINITY);
+				else /*procesador[aux].setNextD(nextDeparture);	*/procesador[aux].setNextD(procesador[aux].getNextD() + StdRandom.exp(mu));
 			}
             	}
         }

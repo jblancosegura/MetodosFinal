@@ -34,15 +34,25 @@ import java.io.*;
 		this.q=q;
 	}
 	public double getNextA(){
-		return nextA;
+		//return nextA;
+		if(tareas.isEmpty())
+			return nextA;
+		return tareas.peek().getNextA();
 	}
 	public void setNextA(double nextA){
+		if(!tareas.isEmpty())
+			tareas.peek().setNextA(nextA);
 		this.nextA=nextA;
 	}
 	public double getNextD(){
-		return nextD;
+		//return nextD;
+		if(tareas.isEmpty())
+			return nextD;
+		return tareas.peek().getNextD();
 	}
 	public void setNextD(double nextD){
+		if(!tareas.isEmpty())
+			tareas.peek().setNextD(nextD);
 		this.nextD=nextD;
 	}
 
@@ -53,11 +63,14 @@ import java.io.*;
 	public void enqueue(Tarea t){
 		tareas.enqueue(t);
 		q.enqueue(nextA);
+		tareas.peek().setNextA(nextA);
 	}
 
 	public double dequeue(){
+		double tareaA = tareas.peek().getNextA();
 		tareas.dequeue();
-		return q.dequeue();
+		/*return*/ q.dequeue();
+		return tareaA;
 	}
 	public double size(){
 		return q.size();
