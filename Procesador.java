@@ -12,6 +12,12 @@ import java.lang.Math;
 	private int tareaID;
 	private boolean touched; //si ya han sido usados o no
 
+	/*MAKESPAN*/
+	private boolean contando;
+	private double makespan;
+	private double init;
+	/**********/
+
 	/*PARETOFRACTAL*/
 	private static final double phi = 0.5; //probabilidad de tiempo mayor que cierto valor
 	private static final double H = .8; //H
@@ -25,10 +31,11 @@ import java.lang.Math;
 		tareas = new Queue<Tarea>();
 		this.id=i;
 		this.pareto = 0;
-		//busy=false;
 		this.nextA=Proyecto.nextArrival;//StdRandom.exp(lambda); 
 		this.nextD=Double.POSITIVE_INFINITY;	
 		this.touched = false;
+		this.makespan = 0;
+		this.contando = false;
 	}
 	public Queue<Double> getQueue(){
 		return q;
@@ -55,7 +62,6 @@ import java.lang.Math;
 		this.ta = ta;
 	}
 	public double getNextA(){
-		//return nextA;
 		if(tareas.isEmpty())
 			return nextA;
 		return tareas.peek().getNextA();
@@ -66,7 +72,6 @@ import java.lang.Math;
 		this.nextA=nextA;
 	}
 	public double getNextD(){
-		//return nextD;
 		if(tareas.isEmpty())
 			return nextD;
 		return tareas.peek().getNextD();
@@ -123,10 +128,31 @@ import java.lang.Math;
 	public void setTouched(boolean touched){
 		this.touched = touched;
 	}
+	public boolean getContando(){
+		return contando;
+	}
+
+	public void setContando(boolean contando){
+		this.contando = contando;
+	}
+	public double getMakespan(){
+		return makespan;
+	}
+	public void setMakespan(double makespan){
+		this.makespan = makespan;
+	}
+	public double getInit(){
+		return init;
+	}
+	public void setInit(double init){
+		this.init = init;
+	}
+	/*Paretofractal*/
 	public double tareasFila(double mu){
 		return (q.size() * mu) + ( (A * Math.pow(q.size(),H) ) / (Math.pow(phi, (1/alfa) ) ) );
 	}
 	public double tareasProc(){
 		return ( ta * ( Math.pow(phi, -(1/alfa) - 1 ) ) );
 	}
+	/*************/
 }
