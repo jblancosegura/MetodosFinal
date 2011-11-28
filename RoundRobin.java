@@ -27,7 +27,7 @@ public class RoundRobin extends Broker{
 
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
-		double departureTime = Proyecto.nextArrival + tarea.getReq();
+		double departureTime = Proyecto.nextArrival;
 		tarea.setNextA(Proyecto.nextArrival);
 		tarea.setNextD(departureTime);
 		/*for(int i = 0; i<indices.length; i++){
@@ -43,7 +43,7 @@ public class RoundRobin extends Broker{
 			assigns = indices[i];
 			procesadores[assigns].enqueue(tarea);
 			procesadores[assigns].setNextA(Proyecto.nextArrival); //se asigna el mismo arrival time a todos los procesadores involucrados	
-			procesadores[assigns].setNextD(departureTime); 	
+			procesadores[assigns].setNextD(departureTime + procesadores[assigns].getTareaReq()); 	
 			//System.out.println("PROCESADOR "+procesadores[assigns].getId()+" HA ADQUIRIDO UNA TAREA NUEVA DE ID:"+tarea.getId()+" .");
 		}
 

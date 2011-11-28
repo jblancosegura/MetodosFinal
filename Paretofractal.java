@@ -27,7 +27,7 @@ public class Paretofractal extends Broker{
 
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
-		double departureTime = Proyecto.nextArrival + tarea.getReq();
+		double departureTime = Proyecto.nextArrival;// + tarea.getReq();
 		tarea.setNextA(Proyecto.nextArrival);
 		tarea.setNextD(departureTime);
 		
@@ -38,7 +38,7 @@ public class Paretofractal extends Broker{
 			System.out.println("PROCESADOR "+i+" Queue Size: "+procesadores[i].size());
 			procesadores[i].enqueue(tarea);
 			procesadores[i].setNextA(Proyecto.nextArrival); //se asigna el mismo arrival time a todos los procesadores involucrados	
-			procesadores[i].setNextD(departureTime); 	
+			procesadores[i].setNextD(departureTime + procesadores[assigns].getTareaReq()); 	
 		}
 	}
 

@@ -9,6 +9,7 @@ public class Proyecto {
 	public static double nextArrival  =0;// = StdRandom.exp(lambda);     // time of next arrival
         public static double nextDeparture =Double.POSITIVE_INFINITY;//= Double.POSITIVE_INFINITY;  // time of next departure
 	public static double makespan = 0; //makespan esperado
+	
 
 	public static void main(String[] args) throws Exception{ 
 		double lambda = 0.027383;; // arrival rate
@@ -66,8 +67,10 @@ public class Proyecto {
 		nextArrival += StdRandom.exp(lambda);
 		Procesador [] procesador = new Procesador[N];
 		double [] valor_esperado = new double[N]; 
+		double [] tiempoPromedioSistema = new double[N]; 
 		for(int j = 0; j<N; j++){
 			procesador[j] = new Procesador(j); 
+			tiempoPromedioSistema[j] = 0;
 			valor_esperado[j] = 0;
 		}	
 		/* ********************** */
@@ -90,7 +93,10 @@ public class Proyecto {
 		String sRuntime; //lecutra de linea del archivo 
 		String sReq; //lecutra de linea del archivo 
 
-		while(Integer.parseInt(sId) != 66124) { 
+		boolean allEmpty = false;
+		int contador = 0;
+		double tiempoTotal = 0;
+		while(!allEmpty) { 
 			
 			//nextArrival = arrivalMenor(procesador); 
 		
@@ -109,6 +115,7 @@ public class Proyecto {
 				sProc = brProcs.readLine();
 				sRuntime = brRun.readLine();
 				sReq = brReq.readLine();
+				contador++;
 				/* CREAR TAREA*/
 			//	Tarea tarea = new Tarea(Integer.parseInt(sId), (generator.nextInt(N) + 1)); //el ID es unico porque i es incremental y la cantidad de procesadores es de 1 a N.
 				if(Integer.parseInt(sProc) <= N){
@@ -123,6 +130,7 @@ public class Proyecto {
 							procesador[c].setInit(nextArrival);
 						}
 						procesador[c].setMakespan(nextArrival - procesador[c].getInit());
+						tiempoPromedioSistema[c] += (nextArrival - procesador[c].getInit());
 					}
 					makespan(procesador); //calculates and prints makespan
 					/**************/
@@ -131,7 +139,12 @@ public class Proyecto {
 					System.out.println("TAREA "+Integer.parseInt(sId)+" HA SIDO RECHAZADA PORQUE NO HAY SUFICIENTE PODER DE COMPUTO.");
 					rechazos++;
 				}
-				nextArrival += StdRandom.exp(lambda);
+				tiempoTotal += (nextArrival - tiempoTotal);
+				if(contador < 65535)
+					nextArrival += StdRandom.exp(lambda);
+				else
+					nextArrival = Double.POSITIVE_INFINITY;
+				
 		    	}
 
 		    	/* SALIDA */
@@ -140,6 +153,7 @@ public class Proyecto {
 				tarea_id = procesador[aux].tarea_id(); //obtenemos el id de la tarea a sacar
 				tarea_procs = procesador[aux].tarea_procs();//obtenemos la cantidad de procesadores que se ocupan para procesar la tarea
 				int indices [] = new int[tarea_procs]; //hacemos el arreglo de los procesadores que tienen la tarea a departir
+				Tarea t = procesador[aux].tareaPeek();
 				contador_de_procs = 0; //incializamos el contador en 0
 				indices[0] = aux;
 				contador_de_procs++; //pues el del departure menor es parte de los procesadores que tienen la tarea
@@ -157,8 +171,10 @@ public class Proyecto {
 						x = indices[m];
 						wait = procesador[x].getNextD() - procesador[x].dequeue();
 						System.out.println("Procesador "+procesador[x].getId()+" Wait = "+wait+", queue size = "+procesador[x].size());
+						procesador[x].setTareaActual(t);
 						if(procesador[x].queueEmpty())procesador[x].setNextD(Double.POSITIVE_INFINITY);
-						else procesador[x].setNextD(procesador[x].getNextD());
+						else procesador[x].setNextD(nextDeparture + procesador[x].getTareaReq());
+						
 					}
 				}
 				else{ //no estan listos todos los procesadores que contienen la tarea...se recalcula un departure
@@ -176,18 +192,32 @@ public class Proyecto {
 					}
 				}
 				makespan(procesador); //calculates and prints makespan
+				tiempoTotal += (nextDeparture - tiempoTotal);
 		    	}
+
+			int filasvacias = 0;
+			for(int c = 0; c<N; c++){
+				if(procesador[c].queueEmpty())
+					filasvacias++;
+			}
+			if(filasvacias == N && contador >= 65535)
+				allEmpty = true;
 		
 		
 		}
 		//medimos cantidad de procesos por cola (procesador)
 		double valor_esperado_final = 0;
+		double tiempoFinal = 0;
 		for(int c = 0; c<N; c++){
 			System.out.println("Procesador "+procesador[c].getId()+" :E[m] = "+(valor_esperado[c]/i));
 			valor_esperado_final += (valor_esperado[c]/i);
+			tiempoPromedioSistema[c] = (tiempoPromedioSistema[c] / i );
+			tiempoFinal += tiempoPromedioSistema[c];
 		}
+		System.out.println("Tiempo total del sistema: "+tiempoTotal);
 		System.out.println("Promedio del valor esperado de procesos en cola: "+(valor_esperado_final / N) );
-		System.out.println("Valor esperado del makespan es: "+(makespan / i) );
+		System.out.println("Tiempo promedio en el sistema: "+tiempoFinal / N);
+		System.out.println("Valor esperado del makespan es: "+(makespan / tiempoTotal) );
 		System.out.println("Tareas rechazadas: "+rechazos);
 		frIds.close();
 		frProcs.close();

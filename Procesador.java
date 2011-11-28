@@ -6,6 +6,8 @@ import java.lang.Math;
 	private Queue<Double> q;
 	private Queue<Tarea> tareas;
 
+	private Tarea tareaActual;
+
 	private double nextA;
 	private double nextD;
 	private double pareto;
@@ -38,6 +40,10 @@ import java.lang.Math;
 		this.makespan = 0;
 		this.contando = false;
 		this.lastD = 0;
+	}
+
+	public void setTareaActual(Tarea t){
+		this.tareaActual = t;
 	}
 	public Queue<Double> getQueue(){
 		return q;
@@ -121,6 +127,15 @@ import java.lang.Math;
 	}
 	public double tareaLastD(){
 		return lastD;
+	}
+	public Tarea tareaPeek(){
+		return tareas.peek();
+	}
+
+	public double getTareaReq(){
+		if(tareaActual != null)
+			return tareaActual.getReq();
+		return 0;
 	}
 
 	public int tarea_procs(){
