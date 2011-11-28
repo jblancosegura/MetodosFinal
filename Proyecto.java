@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.io.*; 
 
 
 public class Proyecto { 
@@ -19,6 +20,16 @@ public class Proyecto {
 	int tarea_id;
 	int tarea_procs;
 	int contador_de_procs = 0; //cuenta cuantos procesadores tienen la tarea deseada en queue
+
+	/* Leer archivos de las tareas. */
+	FileReader frIds = new FileReader("ids.txt"); 
+	FileReader frRun = new FileReader("runtimes.txt"); 
+	FileReader frReq = new FileReader("reqs.txt"); 
+
+	BufferedReader brIds = new BufferedReader(frIds); 
+	BufferedReader brRun = new BufferedReader(frRun); 
+	BufferedReader brReq = new BufferedReader(frReq); 
+	/********************************/
 
 	
 
@@ -70,7 +81,9 @@ public class Proyecto {
 
 
         // Simulacion
-        while (i < ITERACIONES) {
+     //   while (i < ITERACIONES) {
+	String s; //lecutra de linea del archivo 
+	while((s = brIds.readLine()) != null) { 
 		//nextArrival = arrivalMenor(procesador); 
 		
 		nextDeparture = departureMenor(procesador);
@@ -85,7 +98,7 @@ public class Proyecto {
             	/* LLEGADA */
         	if (nextArrival <= nextDeparture) {
 			/* CREAR TAREA*/
-			Tarea tarea = new Tarea(i, (generator.nextInt(N) + 1)); //el ID es unico porque i es incremental y la cantidad de procesadores es de 1 a N.
+			Tarea tarea = new Tarea(Integer.parseInt(s), (generator.nextInt(N) + 1)); //el ID es unico porque i es incremental y la cantidad de procesadores es de 1 a N.
 			broker.assign(tarea); //segun el algoritmo asigna tareas a los procesadores.
 			/**********************/
 			/*Actualizar TA para el Paretofractal y el makespan*/
@@ -151,11 +164,11 @@ public class Proyecto {
 	//medimos cantidad de procesos por cola (procesador)
 	double valor_esperado_final = 0;
 	for(int c = 0; c<N; c++){
-		System.out.println("Procesador "+procesador[c].getId()+" :E[m] = "+(valor_esperado[c]/ITERACIONES));
-		valor_esperado_final += (valor_esperado[c]/ITERACIONES);
+		System.out.println("Procesador "+procesador[c].getId()+" :E[m] = "+(valor_esperado[c]/i));
+		valor_esperado_final += (valor_esperado[c]/i);
 	}
 	System.out.println("Promedio del valor esperado de procesos en cola: "+(valor_esperado_final / N) );
-	System.out.println("Valor esperado del makespan es: "+(makespan / ITERACIONES) );
+	System.out.println("Valor esperado del makespan es: "+(makespan / i) );
 
     }
     
