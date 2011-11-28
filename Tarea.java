@@ -4,10 +4,12 @@ public class Tarea{
 	private int procs;
 	private double nextA;
 	private double nextD;
+	private double req;
 	
-	public Tarea(int id, int procs){
+	public Tarea(int id, int procs, double req){
 		this.id = id;
 		this.procs = procs;
+		this.req = req;
 	}
 		
 	public int getId(){
@@ -16,6 +18,14 @@ public class Tarea{
 	
 	public void setId(int id){
 		this.id = id;
+	}
+
+	public double getReq(){
+		return this.req;
+	}
+	
+	public void setReq(double req){
+		this.req = req;
 	}
 		
 	public int getProcs(){

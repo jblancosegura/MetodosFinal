@@ -24,6 +24,7 @@ import java.lang.Math;
 	private static final double alfa = 1.58; //parametro de forma de distribucion Pareto
 	private static final double A = 600; //parametro de localizacion de distribucion Pareto
 	private double ta = 0; //tiempo de ejecucion de la tarea actual
+	private double lastD;
 	/***************/
 	
 	public Procesador(int i){
@@ -36,6 +37,7 @@ import java.lang.Math;
 		this.touched = false;
 		this.makespan = 0;
 		this.contando = false;
+		this.lastD = 0;
 	}
 	public Queue<Double> getQueue(){
 		return q;
@@ -76,7 +78,13 @@ import java.lang.Math;
 			return nextD;
 		return tareas.peek().getNextD();
 	}
+	
+	public double getLastD(){
+		return lastD;
+	}
+
 	public void setNextD(double nextD){
+		lastD = nextD;
 		if(!tareas.isEmpty())
 			tareas.peek().setNextD(nextD);
 		this.nextD=nextD;
@@ -112,9 +120,7 @@ import java.lang.Math;
 		return -1;
 	}
 	public double tareaLastD(){
-		if(!tareas.isEmpty())
-			return tareas.peek().getNextD();
-		return -1;
+		return lastD;
 	}
 
 	public int tarea_procs(){

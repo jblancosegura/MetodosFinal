@@ -22,7 +22,7 @@ public class List extends Broker{
 
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
-		double departureTime = Proyecto.nextArrival + StdRandom.exp(mu);
+		double departureTime = Proyecto.nextArrival + tarea.getReq();
 		tarea.setNextA(Proyecto.nextArrival);
 		tarea.setNextD(departureTime);
 		/*for(int i = 0; i<indices.length; i++){
