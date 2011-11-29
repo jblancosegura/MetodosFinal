@@ -97,6 +97,7 @@ public class Proyecto {
 		int contador = 0;
 		double tiempoTotal = 0;
 		while(!allEmpty) { 
+		//stdIn.nextDouble();
 			
 			//nextArrival = arrivalMenor(procesador); 
 		
@@ -111,6 +112,7 @@ public class Proyecto {
 
 		    	/* LLEGADA */
 			if (nextArrival <= nextDeparture) {
+				//System.out.println(nextArrival +"  ARRIVAL");
 				sId = brIds.readLine();
 				sProc = brProcs.readLine();
 				sRuntime = brRun.readLine();
@@ -145,10 +147,11 @@ public class Proyecto {
 				else
 					nextArrival = Double.POSITIVE_INFINITY;
 				
+				
 		    	}
 
 		    	/* SALIDA */
-		    	else {
+		    	else {//System.out.println(nextDeparture +"  DEPARTURE");
 				aux = departureMenorIndex(procesador);	//indice del procesador con el menor departure
 				tarea_id = procesador[aux].tarea_id(); //obtenemos el id de la tarea a sacar
 				tarea_procs = procesador[aux].tarea_procs();//obtenemos la cantidad de procesadores que se ocupan para procesar la tarea
@@ -172,20 +175,27 @@ public class Proyecto {
 						wait = procesador[x].getNextD() - procesador[x].dequeue();
 						System.out.println("Procesador "+procesador[x].getId()+" Wait = "+wait+", queue size = "+procesador[x].size());
 						procesador[x].setTareaActual(t);
-						if(procesador[x].queueEmpty())procesador[x].setNextD(Double.POSITIVE_INFINITY);
+						if(procesador[x].queueEmpty()){
+							procesador[x].setNextD(Double.POSITIVE_INFINITY);
+							procesador[aux].setTareaActual(null);
+						}
 						else procesador[x].setNextD(nextDeparture + procesador[x].getTareaReq());
 						
 					}
 				}
 				else{ //no estan listos todos los procesadores que contienen la tarea...se recalcula un departure
 					System.out.println("Procesador "+procesador[aux].getId()+" sigue teniendo una tarea en espera.");	
-					if(procesador[aux].queueEmpty()) procesador[aux].setNextD(Double.POSITIVE_INFINITY);
+					if(procesador[aux].queueEmpty()){
+						procesador[aux].setNextD(Double.POSITIVE_INFINITY);
+						procesador[aux].setTareaActual(null);
+					}
 					else procesador[aux].setNextD(procesador[aux].getNextD() + StdRandom.exp(mu));
 				}
 
 				/**********************/
 				/*Actualizar el makespan*/
 				for(int c = 0; c<N; c++){
+					//System.out.println(procesador[c].getId() + " su queue: "+procesador[c].size());
 					procesador[c].setMakespan(nextDeparture - procesador[c].getInit());
 					if(procesador[c].queueEmpty() && procesador[c].getContando() ){ //queue estaba vacia y se sigue contando, hay que detenerlo
 						procesador[c].setContando(false);
@@ -264,7 +274,7 @@ public class Proyecto {
 			if(arreglo[maximo].getMakespan() < arreglo[i].getMakespan())
 				maximo = i;
 		}
-		System.out.println("El makespan actual es: "+arreglo[maximo].getMakespan()+" y es del Procesador "+arreglo[maximo].getId());
+		//System.out.println("El makespan actual es: "+arreglo[maximo].getMakespan()+" y es del Procesador "+arreglo[maximo].getId());
 		makespan += arreglo[maximo].getMakespan();
     	}
 }

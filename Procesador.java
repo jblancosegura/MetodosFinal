@@ -40,6 +40,7 @@ import java.lang.Math;
 		this.makespan = 0;
 		this.contando = false;
 		this.lastD = 0;
+		this.ta = 0;
 	}
 
 	public void setTareaActual(Tarea t){
@@ -113,6 +114,8 @@ import java.lang.Math;
 		return tareaA;
 	}
 	public double size(){
+		if(q.isEmpty())
+			return 0;
 		return q.size();
 	}
 	
@@ -170,9 +173,13 @@ import java.lang.Math;
 	}
 	/*Paretofractal*/
 	public double tareasFila(double mu){
+		if(q.size() == 0)
+			return 0;
 		return (q.size() * mu) + ( (A * Math.pow(q.size(),H) ) / (Math.pow(phi, (1/alfa) ) ) );
 	}
 	public double tareasProc(){
+		if(q.size() == 0)
+			return 0;
 		return ( ta * ( Math.pow(phi, -(1/alfa) - 1 ) ) );
 	}
 	/*************/

@@ -18,8 +18,10 @@ public class List extends Broker{
 		int indices [] = new int[tarea.getProcs()]; //indices de los procesadores donde meteremos la fila
 		System.out.println("LLEGA TAREA " +tarea.getId()+" QUE REQUIERE "+num+" PROCESADORES.");
 		
-		quicksort(0,(num-1));
-
+		quicksort(0,(procesadores.length-1));
+		for(int c = 0; c<procesadores.length; c++){
+			System.out.println("Procesador "+procesadores[c].getId()+" :size = "+procesadores[c].size());
+		}
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
 		double departureTime = Proyecto.nextArrival;// + tarea.getReq();
@@ -37,7 +39,7 @@ public class List extends Broker{
 		System.out.println("---LIST---");
 		for(int i = 0; i<num; i++){
 			//assigns = indices[i];
-			System.out.println("PROCESADOR "+procesadores[i].getId()+" Queue Size: "+procesadores[i].size());
+			//System.out.println("PROCESADOR "+procesadores[i].getId()+" Queue Size: "+procesadores[i].size());
 			procesadores[i].enqueue(tarea);
 			procesadores[i].setNextA(Proyecto.nextArrival); //se asigna el mismo arrival time a todos los procesadores involucrados	
 			procesadores[i].setNextD(departureTime + procesadores[assigns].getTareaReq()); 	
