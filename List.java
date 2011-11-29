@@ -19,9 +19,6 @@ public class List extends Broker{
 		System.out.println("LLEGA TAREA " +tarea.getId()+" QUE REQUIERE "+num+" PROCESADORES.");
 		
 		quicksort(0,(procesadores.length-1));
-		for(int c = 0; c<procesadores.length; c++){
-			System.out.println("Procesador "+procesadores[c].getId()+" :size = "+procesadores[c].size());
-		}
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
 		double departureTime = Proyecto.nextArrival;// + tarea.getReq();

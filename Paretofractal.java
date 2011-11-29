@@ -23,7 +23,7 @@ public class Paretofractal extends Broker{
 		for(int a = 0; a<procesadores.length; a++){
 			procesadores[a].setPareto(procesadores[a].tareasFila(mu) + procesadores[a].tareasProc());
 		}
-		quicksort(0,(procesadores.length-1));
+		quicksortP(0,(procesadores.length-1));
 
 		/*En caso de que las filas esten vacias ponemos el nextDeparture.*/
 		// ahora assigns es el indice contenido en el arreglo de indices
@@ -44,7 +44,7 @@ public class Paretofractal extends Broker{
 
 	
 
-	private void quicksort(int low, int high) {
+	private void quicksortP(int low, int high) {
 		int i = low, j = high;
 		// Get the pivot element from the middle of the list
 		double pivot = procesadores[low + (high-low)/2].getPareto();
@@ -75,9 +75,9 @@ public class Paretofractal extends Broker{
 		}
 		// Recursion
 		if (low < j)
-			quicksort(low, j);
+			quicksortP(low, j);
 		if (i < high)
-			quicksort(i, high);
+			quicksortP(i, high);
 	}
 
 	private void exchange(int i, int j) {
