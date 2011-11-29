@@ -189,6 +189,7 @@ public class Proyecto {
 					procesador[c].setMakespan(nextDeparture - procesador[c].getInit());
 					if(procesador[c].queueEmpty() && procesador[c].getContando() ){ //queue estaba vacia y se sigue contando, hay que detenerlo
 						procesador[c].setContando(false);
+						procesador[c].setMakespan(0);
 					}
 				}
 				makespan(procesador); //calculates and prints makespan
@@ -211,7 +212,7 @@ public class Proyecto {
 		for(int c = 0; c<N; c++){
 			System.out.println("Procesador "+procesador[c].getId()+" :E[m] = "+(valor_esperado[c]/i));
 			valor_esperado_final += (valor_esperado[c]/i);
-			tiempoPromedioSistema[c] = (tiempoPromedioSistema[c] / i );
+			tiempoPromedioSistema[c] = (tiempoPromedioSistema[c] / tiempoTotal );
 			tiempoFinal += tiempoPromedioSistema[c];
 		}
 		System.out.println("Tiempo total del sistema: "+tiempoTotal);
